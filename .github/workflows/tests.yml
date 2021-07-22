@@ -17,13 +17,13 @@ env:
   AUGUR_DB_PASSWORD: augur
 
 jobs:
-  build:
-
+  tests:
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 4
       matrix:
         python-version: [3.5, 3.6, 3.7, 3.8]
-    
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -33,10 +33,7 @@ jobs:
       
     - name: before install
       run: |
-        docker     strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8]run -d -p 5432:5432 --name augur_test_database augurlabs/augur:test_data@sha256:71da12114bf28584a9a64ede2fac0cbc8dffc8e2f4a2c61231206e2f82201c2f
+        docker run -d -p 5432:5432 --name augur_test_database augurlabs/augur:test_data@sha256:71da12114bf28584a9a64ede2fac0cbc8dffc8e2f4a2c61231206e2f82201c2f
       
     - name: install
       run: |
@@ -48,6 +45,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip tox tox-gh-actions
       
-    - name: tox
+    - name: script
       run: |
         tox
